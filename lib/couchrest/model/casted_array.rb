@@ -15,6 +15,10 @@ module CouchRest::Model
       super(array)
     end
 
+    def as_couch_json
+      self.map do |item| item.respond_to?(:as_couch_json) ? item.as_couch_json : item end
+    end
+
     # Adding new entries
 
     def << obj
