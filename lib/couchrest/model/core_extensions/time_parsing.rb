@@ -83,7 +83,11 @@ Time.class_eval do
   #
 
   def as_json(options = {})
-    fraction = options[:fraction_digits] || CouchRest::Model::Base.time_fraction_digits
+    fraction = if options && options[:fraction_digits]
+      options[:fraction_digits]
+    else
+      CouchRest::Model::Base.time_fraction_digits
+    end
     xmlschema(fraction)
   end
 
