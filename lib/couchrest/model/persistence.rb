@@ -119,7 +119,11 @@ module CouchRest
         #  a document instance
         #
         def build_from_database(doc = {}, options = {}, &block)
-          src = doc[model_type_key]
+          begin
+            src = doc[model_type_key]
+          rescue
+            raise "Cast not valid for #{model_type_key.inspect}\n#{options.inspect}\n\n#{doc.inspect}"
+          end
           base = (src.blank? || src == self.to_s) ? self : src.constantize
           base.new(doc, options.merge(:directly_set_attributes => true), &block)
         end
