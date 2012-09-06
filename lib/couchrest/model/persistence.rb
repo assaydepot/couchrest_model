@@ -34,7 +34,16 @@ module CouchRest
         return true if !self.disable_dirty && !self.changed?
         _run_update_callbacks do
           _run_save_callbacks do
-            result = database.save_doc(self)
+            begin
+              result = database.save_doc(self)
+            rescue RestClient::Conflict
+              tmp_changes = self.changes.clone
+              self.reload
+              tmp_changes.each do |key, values|
+                self[key] = values.last
+              end
+              result = database.save_doc(self)
+            end
             ret = result["ok"] == true
             @changed_attributes.clear if ret && @changed_attributes
             ret
