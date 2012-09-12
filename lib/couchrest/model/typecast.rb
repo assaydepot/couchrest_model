@@ -105,9 +105,9 @@ module CouchRest
         # Handles both Hashes and Time instances.
         def typecast_to_time(value)
           if value.is_a?(Hash)
-            typecast_hash_to_time(value)
+            typecast_hash_to_time(value).in_time_zone
           else
-            Time.parse_iso8601(value.to_s)
+            Time.parse_iso8601(value.to_s).in_time_zone
           end
         rescue ArgumentError
           value
