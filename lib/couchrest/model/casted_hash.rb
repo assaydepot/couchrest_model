@@ -14,6 +14,14 @@ module CouchRest::Model
       obj
     end
 
+    def initialize(hash={}, property=nil, parent = nil)
+      obj = super(nil)
+      obj.casted_by_property = property
+      obj.casted_by = parent unless parent.nil?
+      obj.replace(hash)
+      obj
+    end
+
     # needed for dirty
     def attributes
       self
@@ -44,8 +52,8 @@ module CouchRest::Model
       if use_dirty? && other_hash && other_hash.kind_of?(Hash)
         # new keys and changed keys
         other_hash.keys.each do |key|
-          if self[key] != other_hash[key] || !include?(key) 
-            couchrest_attribute_will_change!(key) 
+          if self[key] != other_hash[key] || !include?(key)
+            couchrest_attribute_will_change!(key)
           end
         end
         # old keys
@@ -70,7 +78,7 @@ module CouchRest::Model
       super
     end
 
-    # ruby 1.9 
+    # ruby 1.9
     def keep_if
       if use_dirty? && block_given?
         self.keys.each do |key|
