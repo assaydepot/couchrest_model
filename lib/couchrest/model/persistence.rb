@@ -14,11 +14,7 @@ module CouchRest
             begin
               result = database.save_doc(self)
             rescue RestClient::Conflict
-              tmp_changes = self.changes.clone
-              self.reload
-              tmp_changes.each do |key, values|
-                self[key] = values.last
-              end
+              sleep 1 # eeeewwwww
               result = database.save_doc(self)
             end
             ret = (result["ok"] == true) ? self : false
