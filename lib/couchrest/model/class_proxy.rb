@@ -86,7 +86,14 @@ module CouchRest
           doc.database = @database if doc && doc.respond_to?(:database)
           doc
         end
-        alias :find :get
+
+        def find(id)
+          if id == :first
+            first
+          else
+            get(id)
+          end
+        end
 
         def get!(id)
           doc = @klass.get!(id, @database)
