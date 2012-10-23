@@ -69,7 +69,27 @@ module CouchRest
             nil
           end
         end
-        alias :find :get
+
+        # Find a document from the database by id or special command
+        # No exceptions will be raised if the document isn't found
+        #
+        # ==== Returns
+        # Object:: if the document was found
+        # or
+        # Nil::
+        # 
+        # === Parameters
+        # id<String, Integer>:: Document ID or special command [:first]
+        # db<Database>:: optional option to pass a custom database to use
+        def find(id)
+          if id == :first
+            first
+          elsif id == :last
+            last
+          else
+            get(id)
+          end
+        end
 
         # Load a document from the database by id
         # An exception will be raised if the document isn't found
