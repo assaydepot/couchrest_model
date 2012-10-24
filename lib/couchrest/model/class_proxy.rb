@@ -90,6 +90,8 @@ module CouchRest
         def find(id)
           if id == :first
             first
+          if id == :last
+            last
           else
             get(id)
           end
