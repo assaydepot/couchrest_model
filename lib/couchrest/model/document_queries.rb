@@ -86,6 +86,8 @@ module CouchRest
             first
           elsif id == :last
             last
+          elsif id == :all
+            all
           else
             get(id)
           end
