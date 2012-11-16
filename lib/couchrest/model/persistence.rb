@@ -13,7 +13,7 @@ module CouchRest
             set_unique_id if new? && self.respond_to?(:set_unique_id)
             begin
               result = database.save_doc(self)
-            rescue RestClient::Conflict
+            rescue RestClient::Conflict => e
               Airbrake.notify_or_ignore(
                 :error_class   => "409 Caught in CouchRest::Model::Persistence#create",
                 :error_message => "About to sleep and retry the save: #{e.message}",
@@ -46,7 +46,7 @@ module CouchRest
           _run_save_callbacks do
             begin
               result = database.save_doc(self)
-            rescue RestClient::Conflict
+            rescue RestClient::Conflict => e
               Airbrake.notify_or_ignore(
                 :error_class   => "409 Caught in CouchRest::Model::Persistence#update",
                 :error_message => "About to reapply changes and retry the save: #{e.message}",
