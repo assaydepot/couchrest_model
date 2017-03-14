@@ -8,8 +8,8 @@ module CouchRest
       # be returned.
       def create(options = {})
         return false unless perform_validations(options)
-        _run_create_callbacks do
-          _run_save_callbacks do
+        run_callbacks(:create) do
+          run_callbacks(:save) do
             set_unique_id if new? && self.respond_to?(:set_unique_id)
             begin
               result = database.save_doc(self)
