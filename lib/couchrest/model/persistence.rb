@@ -42,8 +42,8 @@ module CouchRest
         raise "Calling #{self.class.name}#update on document that has not been created!" if new?
         return false unless perform_validations(options)
         return true if !self.disable_dirty && !self.changed?
-        _run_update_callbacks do
-          _run_save_callbacks do
+        run_callbacks(:update) do
+          run_callbacks(:save) do
             begin
               result = database.save_doc(self)
             rescue RestClient::Conflict => e
@@ -80,7 +80,7 @@ module CouchRest
 
       # Deletes the document from the database. Runs the :destroy callbacks.
       def destroy
-        _run_destroy_callbacks do
+        run_callbacks(:destroy) do
           result = database.delete_doc(self)
           if result['ok']
             @_destroyed = true
