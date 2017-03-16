@@ -3,20 +3,23 @@
 module CouchRest
   module Model
     module Validations
-
-      # Validates if a field is unique 
+      # Validates if a field is unique
       class UniquenessValidator < ActiveModel::EachValidator
+        def initialize(options = {})
+          super
+          setup_uniqueness_validation(options[:class]) if options[:class]
+        end
 
         # Ensure we have a class available so we can check for a usable view
         # or add one if necessary.
-        def setup(model)
+        def setup_uniqueness_validation(model)
           @model = model
           if options[:view].blank?
             attributes.each do |attribute|
               opts = merge_view_options(attribute)
 
               if model.respond_to?(:has_view?) && !model.has_view?(opts[:view_name])
-                opts[:keys] << {:allow_nil => true}
+                opts[:keys] << { allow_nil: true }
                 model.view_by(*opts[:keys])
               end
             end
