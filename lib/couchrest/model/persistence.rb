@@ -14,7 +14,7 @@ module CouchRest
             begin
               result = database.save_doc(self)
             rescue RestClient::Conflict => e
-              Airbrake.notify_or_ignore(
+              Airbrake.notify(
                 :error_class   => "409 Caught in CouchRest::Model::Persistence#create",
                 :error_message => "About to sleep and retry the save: #{e.message}",
                 :parameters    => { "self" => self, "options" => options }
@@ -47,7 +47,7 @@ module CouchRest
             begin
               result = database.save_doc(self)
             rescue RestClient::Conflict => e
-              Airbrake.notify_or_ignore(
+              Airbrake.notify(
                 :error_class   => "409 Caught in CouchRest::Model::Persistence#update",
                 :error_message => "About to reapply changes and retry the save: #{e.message}",
                 :parameters    => { "self" => self, "options" => options }
