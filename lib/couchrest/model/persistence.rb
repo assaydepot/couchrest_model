@@ -16,7 +16,7 @@ module CouchRest
             rescue RestClient::Conflict => e
               Raven.capture_exception(
                 :error_class   => "409 Caught in CouchRest::Model::Persistence#create",
-                :error_message => "About to sleep and retry the save: #{e.message}",
+                :error_message => "About to sleep and retry the save: #{e}",
                 :parameters    => { "self" => self, "options" => options }
               )
               sleep 1 # eeeewwwww
@@ -49,7 +49,7 @@ module CouchRest
             rescue RestClient::Conflict => e
               Raven.capture_exception(
                 :error_class   => "409 Caught in CouchRest::Model::Persistence#update",
-                :error_message => "About to reapply changes and retry the save: #{e.message}",
+                :error_message => "About to reapply changes and retry the save: #{e}",
                 :parameters    => { "self" => self, "options" => options }
               )
               tmp_changes = self.changes.clone
